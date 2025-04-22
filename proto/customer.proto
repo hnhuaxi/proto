@@ -1,0 +1,273 @@
+syntax = "proto3";
+
+package customer;
+
+import "common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "user.proto";
+import "validate/validate.proto";
+// import "adset.proto";
+
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hnhuaxi/proto"
+    description: "MX ads platform gateway"
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ]
+};
+
+service CustomerServiceService {
+  rpc ListCustomerServices(ListCustomerServiceRequest) returns (ListCustomerServiceResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/customerservice
+      get: "/api/v1/customerservice"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get all customer services"
+      tags: "CustomerServiceService"
+    };
+  }
+
+  rpc ListEnterpriseCustomerServices(ListCustomerServiceRequest) returns (ListCustomerServiceResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{enterprise_id}/customerservice/
+      get: "/api/v1/enterprise/{enterprise_id}/customerservice"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get all customer services of enterprise"
+      tags: "CustomerServiceService"
+    };
+  }
+
+  rpc CreateEnterpriseCustomerService(CreateCustomerServiceRequest) returns (CreateCustomerServiceResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{enterprise_id}/customerservice"
+      post: "/api/v1/enterprise/{enterprise_id}/customerservice"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get all customer services"
+      tags: "CustomerServiceService"
+    };
+  }
+
+  rpc BatchCreateEnterpriseCustomerService(BatchCreateCustomerServiceRequest) returns (BatchCreateCustomerServiceResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{enterprise_id}/customerservice"
+      post: "/api/v1/enterprise/{enterprise_id}/batch_customerservices"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "batch create many customer services"
+      tags: "CustomerServiceService"
+    };
+  }
+
+  rpc GetEnterpriseCustomerService(GetCustomerServiceRequest) returns (GetCustomerServiceResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{enterprise_id}/customerservice/{id}
+      get: "/api/v1/enterprise/{enterprise_id}/customerservice/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "get a customer service of enterprise"
+      tags: "CustomerServiceService"
+    };
+  }
+
+  rpc UpdateEnterpriseCustomerService(UpdateCustomerServiceRequest) returns (UpdateCustomerServiceResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{enterprise_id}/customerservice/{id}
+      put: "/api/v1/enterprise/{enterprise_id}/customerservice/{id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "update a customer service of enterprise"
+      tags: "CustomerServiceService"
+    };
+  }
+
+  rpc DeleteEnterpriseCustomerService(DeleteCustomerServiceRequest) returns (DeleteCustomerServiceResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{enterprise_id}/customerservice/{id}
+      delete: "/api/v1/enterprise/{enterprise_id}/customerservice/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "delete a customer service of enterprise"
+      tags: "CustomerServiceService"
+    };
+  }
+
+  rpc AppendCustomerServiceToAdset(AppendCustomerServiceRequest) returns (AppendCustomerServiceResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{enterprise_id}/customerservice/adsets
+      put: "/api/v1/enterprise/{enterprise_id}/customerservice/adsets"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "添加客服到广告中"
+      tags: "CustomerServiceService"
+    };
+  }
+
+  rpc RemoveCustomerServiceFromAdset(RemoveCustomerServiceRequest) returns (RemoveCustomerServiceResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{enterprise_id}/customerservice/{removes
+      put: "/api/v1/enterprise/{enterprise_id}/customerservice/removes"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "删除广告中的客服"
+      tags: "CustomerServiceService"
+    };
+  }
+
+  rpc ReplaceCustomerServiceFromAdset(ReplaceCustomerServiceRequest) returns (ReplaceCustomerServiceResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{enterprise_id}/customerservice/replace
+      put: "/api/v1/enterprise/{enterprise_id}/customerservice/replace"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "替换广告中的客服"
+      tags: "CustomerServiceService"
+    };
+  }
+}
+
+message ListCustomerServiceRequest {
+  uint32 enterprise_id = 1;
+  common.Paginate page = 2;
+  repeated string filters = 3;
+  repeated string columns = 4;
+  repeated string scopes = 5;
+}
+
+message ListCustomerServiceResponse {
+  repeated CustomerService customer_services = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message CreateCustomerServiceRequest {
+  uint32 enterprise_id = 1;
+  uint32 adset_id = 2;
+  string weixin = 3;
+  // bytes qrcode = 4;
+  string qrcode_url = 4;
+  string phonenumber = 5;
+}
+
+message CreateCustomerServiceResponse {
+  uint32 enterprise_id = 1;
+  CustomerService customer_service = 2;
+}
+
+message BatchCreateCustomerServiceRequest {
+  uint32 enterprise_id = 1;
+  uint32 adset_id = 2;
+  message CreateCustomerService {
+    string weixin = 1;
+    string qrcode_url = 2;
+    string phonenumber = 3;
+  }
+
+  repeated CreateCustomerService customer_services = 3;
+}
+
+message BatchCreateCustomerServiceResponse {
+  repeated CustomerService customer_services = 1;
+}
+
+message UpdateCustomerServiceRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  optional string weixin = 3;
+  optional string qrcode_url = 4;
+  optional string phonenumber = 5;
+  optional bool disable = 6;
+}
+
+message UpdateCustomerServiceResponse {
+  uint32 enterprise_id = 1;
+  CustomerService customer_service = 2;
+}
+
+message DeleteCustomerServiceRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}
+
+message DeleteCustomerServiceResponse {
+  uint32 enterprise_id = 1;
+  CustomerService customer_service = 2;
+}
+
+message CustomerService {
+  uint32 id = 1;
+  string weixin = 2;
+  string phonenumber = 3;
+  string qrcode_url = 4;
+  uint32 enterprise_id = 5;
+  uint32 adset_id = 6;
+  // uint32 adset_id = 6;
+  uint32 daily_add_customers = 7;
+  uint32 add_customers = 8;
+  bool disable = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
+}
+
+message AppendCustomerServiceRequest {
+  repeated uint32 customer_ids = 1;
+  uint32 enterprise_id = 2;
+  uint32 adset_id = 3;
+}
+
+message AppendCustomerServiceResponse {
+  uint32 adset_id = 1;
+  uint32 appends = 2;
+}
+
+message RemoveCustomerServiceRequest {
+  repeated uint32 customer_ids = 1;
+  uint32 enterprise_id = 2;
+  uint32 adset_id = 3;
+}
+
+message RemoveCustomerServiceResponse {
+  uint32 adset_id = 1;
+  uint32 deleteds = 2;
+}
+
+message ReplaceCustomerServiceRequest {
+  repeated uint32 customer_ids = 1;
+  uint32 enterprise_id = 2;
+  uint32 adset_id = 3;
+}
+
+message ReplaceCustomerServiceResponse {
+  uint32 adset_id = 1;
+  uint32 adds = 2;
+  uint32 changes = 3;
+  uint32 deleteds = 4;
+}
+
+message GetCustomerServiceRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}
+
+message GetCustomerServiceResponse {
+  uint32 enterprise_id = 1;
+  CustomerService customer_service = 2;
+}

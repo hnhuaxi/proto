@@ -1,0 +1,263 @@
+syntax = "proto3";
+
+package track;
+
+import "common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hnhuaxi/proto"
+    description: "MX ads platform gateway"
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ];
+};
+
+service TrackService {
+  rpc Track(TrackRequest) returns (TrackResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/track/{id}/
+      post: "/api/v1/track/{adset_id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Post a track of AD"
+      description: "Post track events with action params of AD"
+      tags: "TrackService AdsetService"
+    };
+  }
+
+  rpc Pixel(PixelRequest) returns (PixelResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/pixel/
+      post: "/api/v1/pixel"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "A size 1x1 pixel gif image of track"
+      tags: "TrackService AdsetService"
+    };
+  }
+
+  rpc Record(stream RecordRequest) returns (stream RecordResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/track/{adset_id}/record
+      get: "/api/v1/track/record"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Record user behavier in realtime"
+      tags: "TrackService AdsetService"
+    };
+  }
+
+  rpc Callback(CallbackRequest) returns (CallbackResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/callback
+      get: "/api/v1/callback/{provider}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Monitor callback url"
+      description: "monitor adveristor callback url"
+      tags: "TrackService"
+    };
+  }
+}
+
+message Track {
+  uint64 id = 1;
+  uint32 adset_id = 2;
+  string trackid = 3;
+  google.protobuf.Timestamp created_at = 4;
+  string event_type = 5;
+  string click_id = 6;
+  string account_id = 7;
+  string ip = 8;
+  ActionParams params = 9;
+}
+
+message TrackState {
+  uint32 adset_id = 1;
+  string click_id = 2;
+  string state = 3;
+  string scene = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message TrackRequest {
+  uint32 adset_id = 1;
+  string trackid = 2;
+  string event_type = 3;
+  string click_id = 4;
+  string ip = 5;
+  string state = 6;
+  string account_id = 7;
+  string group = 8;
+  ActionParams params = 9;
+}
+
+enum AdMode {
+  AD_MODE_UNKNOWN = 0;
+  AD_MODE_QRCODE = 1; // 二维码
+  AD_MODE_HOUKE = 2; // 获客链接
+}
+
+message Configure {
+  string name = 1;
+  string prompt = 2;
+  string mode = 3; // 广告模式
+  float scrollX1 = 4; // 滚动系数1
+  float scrollX2 = 5; // 滚动系数2
+  float scrollX3 = 6; // 滚动系数3
+  uint32 stayTimeX1 = 7; // 停留时间系数1
+  uint32 stayTimeX2 = 8; // 停留时间系数2
+  uint32 stayTimeX3 = 9; // 停留时间系数3
+  float retX1 = 10; // 回调系数1
+  float retX2 = 11; // 回调系数2
+  string weixin = 12;
+  string qrcode_url = 13;
+  string phonenumber = 14;
+  string web_url = 15;
+  repeated string urls = 16;
+  repeated string huoke_urls = 17;
+  GyroscopeParams m = 18;
+  string state_click_id = 19;
+  repeated string used_scenes = 20;
+  optional int32 button_delay = 21;
+}
+
+message JumpSchema {
+  string url = 1;
+  string weburl = 2;
+  string minilink = 3;
+}
+
+message ClickState {
+  string click_id = 1;
+  string state = 2;
+}
+
+message TrackResponse {
+  oneof resp {
+    google.protobuf.Empty empty = 1;
+    Configure config = 2;
+    JumpSchema schema = 3;
+    ClickState state = 4;
+  }
+}
+
+message ActionParams {
+  optional uint32 staytime = 1;
+  optional float scrollPercent = 2;
+  optional string url = 3;
+  optional string referrer = 4;
+  optional string weixin = 5;
+  optional string position = 6;
+  optional string userAgent = 7;
+  optional string product_name = 8;
+  optional float product_price = 9;
+  optional float product_total = 10;
+  optional int32 product_quantity = 11;
+  optional string phonenumber = 12;
+  optional GyroscopeParams m = 13;
+  optional string scene = 14;
+}
+
+message GyroscopeParams {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
+message PixelRequest {
+  string trackid = 1;
+}
+
+message PixelResponse {
+  bytes image = 1;
+  string trackid = 2;
+}
+
+message Pushed {
+  uint32 id = 1;
+  uint32 adset_id = 2;
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp push_at = 4;
+  google.protobuf.Duration delay = 5;
+  string track_id = 6;
+  string click_id = 7;
+  string account_id = 8;
+  string event_type = 9;
+  string group = 10;
+  uint32 stay_time = 11;
+  float scroll_percent = 12;
+  string status = 13;
+  uint32 user_id = 14;
+  common.User user = 15;
+  string weixin = 16;
+  bool lock = 17;
+  bool deep = 18;
+  GyroscopeParams m = 19;
+}
+
+message RecordRequest {
+  uint32 adset_id = 1;
+}
+
+message RecordResponse {
+  uint32 adset_id = 1;
+}
+
+message CallbackRequest {
+  string provider = 1; // 来源方
+  string aid = 2;
+  string adid = 3;
+  string account_id = 4;
+  string click_id = 5;
+  string callback_url = 6; // 回调 url
+  google.protobuf.Timestamp timestamp = 7;
+  string ip = 8;
+  string user_agent = 9;
+  optional string imei = 10;
+  optional string idfa = 11;
+  optional string os = 12;
+  optional string mac = 13;
+  optional string model = 14;
+  optional string imei_md5 = 15;
+  optional string idfa_md5 = 16;
+}
+
+message Callback {
+  uint32 id = 1;
+  string provider = 2; // 来源方
+  string aid = 3;
+  uint32 adset_id = 4;
+  string account_id = 5;
+  string click_id = 6;
+  string callback_url = 7; // 回调 url
+  string ip = 8;
+  string user_agent = 9;
+  google.protobuf.Timestamp timestamp = 10;
+  optional string imei = 11;
+  optional string mac = 12;
+  optional string model = 13;
+  optional string idfa = 14;
+  optional string imei_md5 = 15;
+  optional string idfa_md5 = 16;
+  optional string os = 17;
+
+  google.protobuf.Timestamp created_time = 18;
+  google.protobuf.Timestamp update_time = 19;
+  google.protobuf.Timestamp push_time = 20;
+}
+
+message CallbackResponse {}

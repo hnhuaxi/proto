@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package policy;
+
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: { version : "1.0" }
+  external_docs : {
+    url:  "https://github.com/hnhuaxi/proto"
+    description:  "MX ads platform gateway"
+  }
+  schemes:[HTTP, HTTPS];
+};
+
+service PolicyService {
+  rpc ListPolicies(ListPoliciesRequest) returns (ListPoliciesResponse) {}
+}
+
+message ListPoliciesRequest { uint32 user_id = 1; }
+
+message ListPoliciesResponse { repeated Policy policies = 1; }
+
+message Policy {
+  string role = 1;
+  string resource = 2;
+  string action = 3;
+  Effect effect = 4;
+}
+
+enum Effect {
+  ALLOW = 0;
+  DENY = 1;
+}

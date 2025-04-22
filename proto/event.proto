@@ -1,0 +1,54 @@
+syntax = "proto3";
+// 业务流程
+package events;
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info : {version : "1.0";
+}
+external_docs : {
+url:
+  "https://github.com/hnhuaxi/proto";
+description:
+  "MX ads platform gateway";
+}
+schemes :
+    [HTTP, HTTPS];
+}
+;
+
+service EventsService {
+
+  rpc GetEvents(GetEventsRequest) returns (stream Event) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/events
+      get : "/api/v1/events"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary : "Get events"
+      description : "Get events from the stream system"
+      tags : "EventsService"
+    };
+  }
+}
+
+message Event {
+  uint32 id = 1;
+  string name = 2;
+  string description = 3;
+  string type = 4;
+  string status = 5;
+}
+
+message GetEventsRequest {
+  string prefix = 1;
+  string type = 2;
+  string status = 3;
+}

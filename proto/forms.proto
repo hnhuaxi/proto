@@ -1,0 +1,317 @@
+syntax = "proto3";
+
+package forms;
+
+import "adset.proto";
+import "common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "track.proto";
+
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hnhuaxi/proto"
+    description: "MX ads platform gateway"
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ];
+};
+
+service FormService {
+  rpc CreateFormSchema(CreateFormSchemaRequest) returns (FormSchemaResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/events
+      post: "/api/v1/form_schemas"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create form Schema"
+      description: "Create form Schema on the system"
+      tags: "FormService"
+    };
+  }
+
+  rpc CreateEnterpriseFormSchema(CreateFormSchemaRequest) returns (FormSchemaResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/events
+      post: "/api/v1/enterprise/{enterprise_id}/form_schemas"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create Enterprise form Schema"
+      description: "Create Enterprise form Schema on the system"
+      tags: "FormService"
+    };
+  }
+
+  rpc ListForms(ListFormRequest) returns (ListFormResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/events
+      get: "/api/v1/forms"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List forms"
+      description: "List forms from the system"
+      tags: "FormService"
+    };
+  }
+
+  rpc ListEnterpriseForms(ListFormRequest) returns (ListFormResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/events
+      get: "/api/v1/enterprise/{enterprise_id}/forms"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List forms"
+      description: "List forms from the system"
+      tags: "FormService"
+    };
+  }
+
+  rpc ListFormSchemas(ListFormSchemasRequest) returns (ListFormSchemasResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/events
+      get: "/api/v1/form_schemas"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List form schemas"
+      description: "List forms schemas from the system"
+      tags: "FormService"
+    };
+  }
+
+  rpc ListEnterpriseFormSchemas(ListFormSchemasRequest) returns (ListFormSchemasResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/events
+      get: "/api/v1/enterprise/{enterprise_id}/form_schemas"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Enterprise form schemas"
+      description: "List Enterprise forms schemas from the system"
+      tags: "FormService"
+    };
+  }
+
+  rpc ChangeFormSchema(ChangeFormSchemaRequest) returns (FormSchemaResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/form_schemas/{id}
+      put: "/api/v1/form_schemas/{id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Enterprise form schemas"
+      description: "List Enterprise forms schemas from the system"
+      tags: "FormService"
+    };
+  }
+
+  rpc GetFormSchema(GetFormSchemaRequest) returns (FormSchemaResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/form_schemas/{id}
+      get: "/api/v1/form_schemas/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get Form Schema"
+      description: "Get Form Schema from the system"
+      tags: "FormService"
+    };
+  }
+
+  rpc DeleteFormSchema(DeleteFormSchemaRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/form_schemas/{id}
+      delete: "/api/v1/form_schemas/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Delete Form Schemas"
+      description: "Delete from schemas on the system"
+      tags: "FormService"
+    };
+  }
+
+  rpc PostForm(PostFormRequest) returns (PostFormResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/forms
+      post: "/api/v1/forms"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Post to form"
+      description: "Post to a form schema system"
+      tags: "FormService"
+    };
+  }
+
+  rpc GetForm(GetFormRequest) returns (FormResponse) {
+    option (google.api.http) = {
+      // Route to this method from Get requests to /api/v1/forms/{id}
+      get: "/api/v1/forms/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get a form"
+      description: "Get a Form on system"
+      tags: "FormService"
+    };
+  }
+
+  rpc UpdateForm(UpdateFormRequest) returns (FormResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/events
+      put: "/api/v1/forms/{id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Change form data"
+      description: "Change a form on the system"
+      tags: "FormService"
+    };
+  }
+
+  rpc DeleteForm(DeleteFormRequest) returns (FormResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/events
+      delete: "/api/v1/forms/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Delete a form"
+      description: "Delete a from data from the system"
+      tags: "FormService"
+    };
+  }
+}
+
+message CreateFormSchemaRequest {
+  uint32 enterprise_id = 1;
+  string name = 2;
+  string schema = 3;
+  string primary = 4;
+  bool validateOff = 5;
+}
+
+message ListFormRequest {
+  common.Paginate page = 1;
+  uint32 enterprise_id = 2;
+  repeated string filters = 3;
+  repeated string columns = 4;
+  repeated string scopes = 5;
+}
+
+message ListFormResponse {
+  repeated Form forms = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message FormSchema {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  string name = 3;
+  string primary = 4;
+  string schema = 5;
+  bool validateOff = 6;
+  google.protobuf.Timestamp created_time = 7;
+  google.protobuf.Timestamp updated_time = 8;
+}
+
+message Form {
+  message Adset {
+    uint32 id = 1;
+    string name = 2;
+  }
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  uint32 schema_id = 3;
+  uint32 adset_id = 4;
+  optional Adset adset = 5;
+  common.Enterprise enterprise = 6;
+  string form = 7;
+  string form_title = 8;
+  string click_id = 9;
+  google.protobuf.Timestamp created_time = 10;
+  google.protobuf.Timestamp updated_time = 11;
+}
+
+message ListFormSchemasRequest {
+  common.Paginate page = 1;
+  uint32 enterprise_id = 2;
+  repeated string filters = 3;
+  repeated string columns = 4;
+  repeated string scopes = 5;
+}
+
+message ListFormSchemasResponse {
+  repeated FormSchema schemas = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message ChangeFormSchemaRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  optional string name = 3;
+  optional string schema = 4;
+  optional bool validateOff = 5;
+  optional string primary = 6;
+}
+
+message FormSchemaResponse {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  string name = 3;
+  string schema = 4;
+  bool validateOff = 5;
+  string primary = 6;
+  google.protobuf.Timestamp created_time = 7;
+  google.protobuf.Timestamp updated_time = 8;
+}
+
+message GetFormSchemaRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}
+
+message DeleteFormReqeust {
+  uint32 id = 1;
+}
+
+message DeleteFormSchemaRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}
+
+message PostFormRequest {
+  uint32 schema_id = 1;
+  optional uint32 adset_id = 2;
+  string click_id = 3;
+  string body = 4;
+  track.ActionParams action_params = 5;
+  bool deep = 6;
+}
+
+message PostFormResponse {}
+
+message GetFormRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}
+
+message FormResponse {
+  uint32 id = 1;
+  string body = 2;
+}
+
+message UpdateFormRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  string body = 3;
+}
+
+message DeleteFormRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}

@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package common;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/hnhuaxi/proto/proto/common;common";
+
+message Paginate {
+  optional string after_id = 1;
+  optional string before_id = 2;
+  // optional int32 offset = 3;
+  optional int32 page = 3;
+  optional int32 page_size = 4;
+}
+
+message PaginatedResponse {
+  optional int32 total_pages = 1;
+  optional int32 total_counts = 2;
+  optional int32 total_items = 3;
+  optional string next_id = 4;
+  optional string prev_id = 5;
+}
+
+message Filter {
+  string id = 1;
+  google.protobuf.Any value = 2;
+}
+
+enum OrderMode {
+  ORDER_ASC = 0;
+  ORDER_DESC = 1;
+}
+
+message Sort {
+  string field = 1;
+  OrderMode order = 2;
+}
+
+message User {
+  uint32 id = 1;
+  string username = 2;
+  string password = 3;
+  string avatar = 4;
+  string email = 5;
+  string role = 6;
+  string roleId = 7;
+  string realname = 8;
+  uint32 gender = 9;
+  string location = 10;
+  uint32 loginCount = 11;
+  string mobile = 12;
+  string state = 13;
+  string summary = 14;
+  string wechatAccount = 15;
+  optional string password_hash = 16;
+  optional uint32 select_enterprise_id = 17;
+  optional Enterprise select_enterprise = 18;
+  google.protobuf.Timestamp createdAt = 19;
+  google.protobuf.Timestamp updatedAt = 20;
+}
+
+enum EnterpriseGrade {
+  ORG_GRADE_DEALER = 0;
+  ORG_GRADE_DISTRIBUTOR = 1;
+}
+
+message Member {
+  uint32 id = 1;
+  uint32 user_id = 2;
+  uint32 enterprise_id = 3;
+  optional User user = 4;
+  optional Enterprise enterprise = 5;
+  google.protobuf.Timestamp createdAt = 6;
+  google.protobuf.Timestamp updatedAt = 7;
+}
+
+message Enterprise {
+  uint32 id = 1;
+  string name = 2;
+  string description = 3;
+  string logo = 4;
+  string website = 5;
+  EnterpriseGrade grade = 6;
+  int32 depth = 7;
+  optional common.User owner = 8;
+  uint32 onwer_id = 9;
+  int32 children_count = 10;
+  repeated Member members = 11;
+  optional Enterprise parent = 12;
+  optional uint32 parent_id = 13;
+  repeated Enterprise children = 14;
+  google.protobuf.Timestamp createdAt = 15;
+  google.protobuf.Timestamp updatedAt = 16;
+}

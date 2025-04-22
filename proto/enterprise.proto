@@ -1,0 +1,323 @@
+syntax = "proto3";
+
+package enterprise;
+
+import "common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "validate/validate.proto";
+
+// Defines the import path that should be used to import the generated package,
+// and the package name.
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hnhuaxi/proto"
+    description: "MX ads platform gateway"
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ]
+};
+
+service EnterpriseService {
+  // 查询企业
+  rpc ListEnterprise(ListEnterpriseRequest) returns (ListEnterpriseResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/enterprise
+      get: "/api/v1/enterprise"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List enterprise"
+      description: "Search all enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+
+  // 创建企业
+  rpc CreateEnterprise(CreateEnterpriseRequest) returns (CreateEnterpriseResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise
+      post: "/api/v1/enterprise"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create enterprise"
+      description: "Create a new enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+
+  // 获取企业
+  rpc GetEnterprise(GetEnterpriseRequest) returns (GetEnterpriseResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/enterprise/{id}
+      get: "/api/v1/enterprise/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get enterprise"
+      description: "Get an enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+
+  // 更新企业
+  rpc UpdateEnterprise(UpdateEnterpriseRequest) returns (UpdateEnterpriseResponse) {
+    option (google.api.http) = {
+      // Route to this method from PUT requests to /api/v1/enterprise/{id}
+      put: "/api/v1/enterprise/{id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Update enterprise"
+      description: "Update an enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+
+  // 删除企业
+  rpc DeleteEnterprise(DeleteEnterpriseRequest) returns (DeleteEnterpriseResponse) {
+    option (google.api.http) = {
+      // Route to this method from DELETE requests to /api/v1/enterprise/{id}
+      delete: "/api/v1/enterprise/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Delete enterprise"
+      description: "Delete an enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+
+  // 转让企业所有权
+  rpc TransferEnterprise(TransferEnterpriseRequest) returns (TransferEnterpriseResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{id}/transfer
+      put: "/api/v1/enterprise/{id}/transfer"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Transfer enterprise"
+      description: "Transfer an enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+
+  // 移动企业成为子企业
+  rpc MoveEnterprise(MoveEnterpriseRequest) returns (MoveEnterpriseResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{id}/move
+      put: "/api/v1/enterprise/{id}/move"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Move enterprise"
+      description: "Move an enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+
+  // 升级企业
+  rpc UpgradeEnterprise(UpgradeEnterpriseRequest) returns (UpgradeEnterpriseResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{id}/upgrade
+      put: "/api/v1/enterprise/{id}/upgrade"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Upgrade enterprise"
+      description: "Upgrade an enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+
+  rpc ListMembers(ListMembersRequest) returns (ListMembersResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{id}/members
+      get: "/api/v1/enterprise/{id}/members"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List enterprise members"
+      description: "List enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+
+  rpc AddMember(AddMemberRequest) returns (AddMemberResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{id}/members
+      put: "/api/v1/enterprise/{id}/members"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Add a user to enterprise member"
+      description: "Add a user into enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+
+  rpc RemoveMember(RemoveMemberRequest) returns (RemoveMemberResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{id}/members/{userId}
+      delete: "/api/v1/enterprise/{id}/members/{member_id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Remove a user to enterprise member"
+      description: "Remove a user into enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+
+  rpc SelectEnterprise(SelectEnterpriseRequest) returns (SelectEnterpriseResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/enterprise/{id}/select/{userId}
+      put: "/api/v1/enterprise/{enterprise_id}/select"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Select default enterprise"
+      description: "Select default enterprise on the server."
+      tags: "EnterpriseService"
+    };
+  }
+}
+
+message ListEnterpriseRequest {
+  common.Paginate page = 1;
+  repeated string filters = 2;
+  repeated string columns = 3;
+  repeated string scopes = 4;
+  repeated string fields = 5;
+  optional uint32 parent_id = 6;
+}
+
+message ListEnterpriseResponse {
+  repeated common.Enterprise enterprise = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message CreateEnterpriseRequest {
+  string name = 1;
+  string description = 2;
+  common.EnterpriseGrade grade = 3;
+  optional string logo = 4;
+  optional string website = 5;
+  optional uint32 parent_id = 6;
+}
+
+message CreateEnterpriseResponse {
+  common.Enterprise enterprise = 1;
+}
+
+message GetEnterpriseRequest {
+  uint32 id = 1;
+  repeated string fields = 2;
+}
+
+message GetEnterpriseResponse {
+  common.Enterprise enterprise = 1;
+}
+
+message UpdateEnterpriseRequest {
+  uint32 id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional string logo = 4;
+  optional string website = 5;
+}
+
+message UpdateEnterpriseResponse {
+  common.Enterprise enterprise = 1;
+}
+
+message DeleteEnterpriseRequest {
+  uint32 id = 1;
+}
+
+message DeleteEnterpriseResponse {
+  common.Enterprise enterprise = 1;
+}
+
+message TransferEnterpriseRequest {
+  uint32 id = 1;
+  uint32 receive_id = 2;
+}
+
+message TransferEnterpriseResponse {
+  bool success = 1;
+}
+
+message MoveEnterpriseRequest {
+  uint32 id = 1;
+  uint32 parent_id = 2;
+}
+
+message MoveEnterpriseResponse {
+  bool success = 1;
+}
+
+message UpgradeEnterpriseRequest {
+  uint32 id = 1;
+  common.EnterpriseGrade grade = 2;
+}
+
+message UpgradeEnterpriseResponse {
+  bool success = 1;
+}
+
+// message Member {
+//     uint32 id = 1;
+//     uint32 user_id = 2;
+//     uint32 enterprise_id = 3;
+//     optional common.User user = 4;
+//     optional common.Enterprise enterprise = 5;
+//     google.protobuf.Timestamp createdAt = 6;
+//     google.protobuf.Timestamp updatedAt = 7;
+// }
+
+message ListMembersRequest {
+  uint32 id = 1;
+  common.Paginate page = 2;
+  repeated common.Filter filters2 = 3;
+  repeated common.Sort sorts = 4;
+  repeated string filters = 5;
+  repeated string columns = 6;
+  repeated string scopes = 7;
+}
+
+message ListMembersResponse {
+  repeated common.Member members = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message AddMemberRequest {
+  uint32 id = 1;
+  uint32 user_id = 2;
+}
+
+message AddMemberResponse {
+  bool success = 1;
+}
+
+message RemoveMemberRequest {
+  uint32 id = 1;
+  uint32 member_id = 2;
+}
+
+message RemoveMemberResponse {
+  bool success = 1;
+}
+
+message SelectEnterpriseRequest {
+  uint32 enterprise_id = 1;
+}
+
+message SelectEnterpriseResponse {
+  common.Enterprise enterprise = 1;
+}

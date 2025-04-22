@@ -1,0 +1,676 @@
+syntax = "proto3";
+
+package account;
+
+import "adstrategy.proto";
+// import "google/protobuf/api.proto";
+import "common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "validate/validate.proto";
+
+// Defines the import path that should be used to import the generated package,
+// and the package name.
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hnhuaxi/proto";
+    description: "MX ads platform gateway";
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ];
+};
+
+service AccountService {
+  // 建立主体账户
+  rpc CreateAccount(CreateAccountRequest) returns (Account) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/accounts
+      post: "/api/v1/accounts"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Add a account"
+      description: "Add a account to the server."
+      tags: "AccountService"
+    };
+  }
+
+  // 查询主体账户
+  rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      get: "/api/v1/accounts"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List accounts"
+      description: "List all accounts on the server."
+      tags: "AccountService"
+    };
+  }
+
+  // 查询企业主体账户
+  rpc ListEnterpriseAccounts(ListAccountsRequest) returns (ListAccountsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      get: "/api/v1/enterprise/{enterprise_id}/accounts"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Enterprise accounts"
+      description: "List all Enterprise accounts on the server."
+      tags: "AccountService EnterpriseService"
+    };
+  }
+
+  // 查询主体子账户
+  rpc ListAgentAccounts(ListAgentAccountsRequest) returns (ListAccountsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      get: "/api/v1/accounts/{account_id}/agent_accounts"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Child accounts"
+      description: "List a account's all child accounts on the server."
+      tags: "AccountService"
+    };
+  }
+
+  // 导入代理子账户
+  rpc ImportAgentAccount(ImportAgentAccountRequest) returns (ImportAgentAccountsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts/{account_id}/import
+      post: "/api/v1/accounts/{account_id}/import"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Import Agent account"
+      description: "Import a agent account from accounts on the server."
+      tags: "AccountService"
+    };
+  }
+  // // 查询企业主体子账户
+  // rpc ListEnterpriseChildAccounts(ListAccountsRequest) returns (ListAccountsResponse) {
+  //   option (google.api.http) = {
+  //     // Route to this method from GET requests to /api/v1/accounts
+  //     get : "/api/v1/enterprise/{enterprise_id}/accounts/{account_id}/accounts"
+  //   };
+  //   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+  //     summary : "List Enterprise child accounts"
+  //     description : "List a account of Enterprise child accounts on the server."
+  //     tags : "AccountService EnterpriseService"
+  //   };
+  // }
+
+
+  // 更新账户
+  rpc UpdateAccount(UpdateAccountRequest) returns (Account) {
+    option (google.api.http) = {
+      // Route to this method from PUT requests to /api/v1/accounts/{id}
+      put: "/api/v1/accounts/{id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Update a account"
+      description: "Update a account on the server."
+      tags: "AccountService"
+    };
+  }
+
+  // 删除账户
+  rpc DeleteAccount(DeleteAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      // Route to this method from DELETE requests to /api/v1/accounts/{id}
+      delete: "/api/v1/accounts/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Delete a account"
+      description: "Delete a account on the server."
+      tags: "AccountService"
+    };
+  }
+
+  rpc GetAccount(GetAccountRequest) returns (Account) {
+    option (google.api.http) = {
+      // Route to this method from PUT requests to /api/v1/accounts/{id}
+      get: "/api/v1/accounts/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get a account"
+      description: "Get a account on the server."
+      tags: "AccountService"
+    };
+  }
+  // 授予帐户权限
+  rpc GrantAccount(GrantToRequest) returns (GrantToResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      put: "/api/v1/accounts/{id}/grant",
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Grant to a user have permission to management an account"
+      description: "List all accounts on the server."
+      tags: "AccountService"
+    };
+  }
+
+  // 撤销帐户权限
+  rpc RevokeAccount(RevokeFromRequest) returns (RevokeFromResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      put: "/api/v1/accounts/{id}/revoke",
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Revoke user permission to management from account"
+      description: "List all accounts on the server."
+      tags: "AccountService"
+    };
+  }
+
+  // Import Schemas  导入账户模式
+  rpc ImportSchemas(ImportSchemasRequest) returns (ImportSchemasResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      get: "/api/v1/accounts/import_schemas"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Import account schemas"
+      description: "admin can import account schemas"
+      tags: "AccountService"
+    };
+  }
+
+  // Import Auth 导入账户授权
+  rpc ImportAuth(ImportAuthRequest) returns (ImportAuthResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      put: "/api/v1/accounts/import_auth"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Import account auth"
+      description: "Import accounts through third-party platform authorization"
+      tags: "AccountService"
+    };
+  }
+
+  // // ImportCallback 导入账户回调
+  // rpc ImportCallback(ImportCallbackRequest) returns (ImportCallbackResponse) {
+  //   option (google.api.http) = {
+  //     // Route to this method from GET requests to /api/v1/accounts
+  //     get: "/api/v1/accounts/callback/{module}"
+  //   };
+  //   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+  //     summary: "Import account callback"
+  //     description: "Import accounts through third-party platform callback"
+  //     tags: "Accounts"
+  //   };
+  // };
+
+  // ImportAccount 导入帐号
+  rpc ImportAccount(ImportAccountRequest) returns (ImportAccountResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      post: "/api/v1/accounts/import"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Import account"
+      description: "Import the account of the external platform into the user's accounts"
+      tags: "AccountService"
+    };
+  }
+
+  // BindingAccount 帐号绑定
+  rpc BindingAccount(BindingAccountRequest) returns (BindingAccountResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      put: "/api/v1/accounts/{account_id}/binding"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Binding account"
+      description: "admin can binding account"
+      tags: "AccountService"
+    };
+  }
+
+  // 解绑帐号
+  rpc UnbindingAccount(UnbindingAccountRequest) returns (UnbindingAccountResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      delete: "/api/v1/accounts/{account_id}/binding"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Unbinding account"
+      description: "admin can unbinding account"
+      tags: "AccountService"
+    };
+  }
+
+  // 查询主体账户
+  rpc ListUserActionSetIds(ListUserActionSetRequest) returns (UserActionsSetResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      get: "/api/v1/accounts/{account_id}/user_action_sets"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List user_action_set_ids of account"
+      description: "List user_action_set_ids of account on the server."
+      tags: "AccountService"
+    };
+  }
+}
+
+message CreateAccountRequest {
+  string name = 1;
+  optional string logo = 2;
+}
+
+message ListAccountsRequest {
+  common.Paginate page = 1;
+  repeated string filters = 2;
+  repeated string columns = 3;
+  repeated string scopes = 4;
+  optional bool refresh = 5; // 刷新获取第三方广告平台数据
+  uint32 account_id = 6;
+  uint32 enterprise_id = 7;
+  // oneof scope {
+  //   uint32 user_id = 6;
+  //   uint32 enterprise_id = 7;
+  // }
+}
+
+message ListAgentAccountsRequest {
+  common.Paginate page = 1;
+  repeated string filters = 2;
+  repeated string columns = 3;
+  repeated string scopes = 4;
+  optional bool refresh = 5; // 刷新获取第三方广告平台数据
+  uint32 account_id = 6;
+  string account_type = 7;
+  repeated uint64 child_accounts = 8;
+  uint32 enterprise_id = 9;
+}
+
+message ListAccountsResponse {
+  repeated Account accounts = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message ImportAgentAccountRequest {
+  uint32 account_id = 1;
+  uint32 enterprise_id = 2;
+  repeated uint64 agent_accounts = 3;
+}
+
+message ImportAgentAccountsResponse {
+  repeated Account accounts = 1;
+}
+
+enum AccountRole {
+  Customer = 0;
+  Agent = 1;
+  Admin = 2;
+  MajordomoAgent = 3;
+  Org = 4;
+}
+
+message Brand {
+  string brand_img = 1;
+  string brand_name = 2;
+}
+
+message Adcreative_elements {
+  Brand brand = 1;
+  string description = 2;
+  string image = 3;
+}
+
+message Page_spec {
+  string page_url = 1;
+  uint32 page_id = 2;
+}
+
+message Adcreative {
+  uint32 id = 1;
+  Adcreative_elements adcreative_elements = 2;
+  string uid = 3;
+  uint64 adcreative_id = 4;
+  string adcreative_name = 5;
+  uint32 adcreative_template_id = 6;
+  uint64 campaign_id = 7;
+  string creative_template_category = 8;
+  bool enable_breakthrough_siteset = 9;
+  Page_spec page_spec = 10;
+  string page_type = 11;
+  string playable_page_material_id = 12;
+  string promoted_object_id = 13;
+  string promoted_object_type = 14;
+  repeated string site_set = 15;
+  google.protobuf.Timestamp created_time = 16;
+  google.protobuf.Timestamp updated_time = 17;
+  google.protobuf.Timestamp source_created_time = 18;
+  google.protobuf.Timestamp source_updated_time = 19;
+}
+
+message Range {
+  uint32 max = 1;
+  uint32 min = 2;
+}
+
+message Geo_location {
+  repeated string location_types = 1;
+  repeated uint32 regions = 2;
+}
+
+message Targeting {
+  uint32 id = 1;
+  string uid = 2;
+  string provider = 3;
+  string provider_id = 4;
+  string targeting_id = 5;
+  repeated Range age = 6;
+  repeated string gender = 7;
+  Geo_location geo_location = 8;
+  google.protobuf.Timestamp created_time = 9;
+  google.protobuf.Timestamp updated_time = 10;
+}
+
+message Conversion {
+  uint32 id = 1;
+  string uid = 2;
+  string access_status = 3;
+  string access_type = 4;
+  string claim_type = 5;
+  uint32 conversion_id = 6;
+  uint32 conversion_link_id = 7;
+  string conversion_name = 8;
+  string conversion_scene = 9;
+  string create_source_type = 10;
+  string feedback_url = 11;
+  string impression_feedback_url = 12;
+  bool is_deleted = 13;
+  string optimization_goal = 14;
+  string promoted_object_id = 15;
+  bool self_attributed = 16;
+  bool site_set_enable = 17;
+  uint32 user_action_set_id = 18;
+  google.protobuf.Timestamp created_time = 19;
+  google.protobuf.Timestamp updated_time = 20;
+}
+
+message Adgroup {
+  uint32 id = 1;
+  uint32 ad_count = 2;
+  string uid = 3;
+  string provider = 4;
+  string provider_id = 5;
+  string adgroup_name = 6;
+  bool automatic_site_enabled = 7;
+  string begin_date = 8;
+  uint32 bid_amount = 9;
+  string bid_mode = 10;
+  string bid_strategy = 11;
+  uint64 campaign_id = 12;
+  string configured_status = 13;
+  uint32 conversion_id = 14;
+  Conversion conversion = 15;
+  string source_conversion_id = 16;
+  string cost_guarantee_message = 17;
+  string cost_guarantee_status = 18;
+  uint32 daily_budget = 19;
+  string end_date = 20;
+  bool expand_enabled = 21;
+  repeated google.protobuf.Any expand_targeting = 22;
+  string optimization_goal = 23;
+  string promoted_object_type = 24;
+  repeated string site_set = 25;
+  string status = 26;
+  string system_status = 27;
+  uint64 targeting_id = 28;
+  string source_targeting_id = 29;
+  Targeting targeting = 30;
+  string targeting_translation = 31;
+  string time_series = 32;
+  google.protobuf.Timestamp created_time = 33;
+  google.protobuf.Timestamp updated_time = 34;
+  google.protobuf.Timestamp source_created_time = 35;
+  google.protobuf.Timestamp source_updated_time = 36;
+}
+
+message Ad {
+  uint32 id = 1;
+  string uid = 2;
+  string provider = 3;
+  string provider_id = 4;
+  string ad_name = 5;
+  uint32 adset_id = 6;
+  Adcreative adcreative = 8;
+  uint64 adcreative_id = 9;
+  string source_adcreative_id = 10;
+  uint64 adgroup_id = 11;
+  string source_adgroup_id = 12;
+  Adgroup adgroup = 13;
+  uint64 account_id = 14;
+  string source_account_id = 15;
+  Account account = 16;
+  uint64 campaign_id = 17;
+  string source_campaign_id = 18;
+  string click_tracking_url = 19;
+  string configured_status = 20;
+  string impression_tracking_url = 21;
+  bool is_deleted = 22;
+  bool is_dynamic_creative = 23;
+  string reject_message = 24;
+  string system_status = 25;
+  google.protobuf.Timestamp created_time = 26;
+  google.protobuf.Timestamp updated_time = 27;
+  google.protobuf.Timestamp source_created_time = 28;
+  google.protobuf.Timestamp source_updated_time = 29;
+}
+
+message Account {
+  uint32 id = 1;
+  string uid = 2;
+  string account_id = 3; // 帐号ID
+  AccountRole role = 4;
+  string name = 5; // 帐号名称
+  string website = 6; // 公司网站
+  string corp_name = 7; // 公司名称
+  string license = 8; //  营业执照注册号/三证合一统一社会信用代码
+  string license_picture = 9; // 资质证件
+  string identity = 10; // 身份证号
+  string city = 11; // 注册城市
+  string contact_person = 12; // 联系人
+  string contact_person_id = 13; // 联系人身份证
+  string contact_person_email = 14 [(validate.rules).string.email = true]; // 联系人邮箱
+  string contact_person_phone = 15; // 联系人联系电话
+  string industry = 16; // 行业
+  string provider = 17;
+  string access_token = 18;
+  int64 access_token_expires_in = 19;
+  google.protobuf.Timestamp access_token_expiresAt = 20;
+  string refresh_token = 21;
+  string status = 22;
+  int64 refresh_token_expires_in = 23;
+  google.protobuf.Timestamp refresh_token_expiresAt = 24;
+  int32 user_id = 25;
+  common.User user = 26;
+  int32 enterprise_id = 27;
+  common.Enterprise enterprise = 28;
+  repeated common.Enterprise ents = 29; 
+  AccountSetting setting = 30;
+  uint32 parent_id = 31;
+  Account parent = 32;
+  repeated Ad Ads = 33;
+  google.protobuf.Timestamp createdAt = 34;
+  google.protobuf.Timestamp updatedAt = 35;
+  google.protobuf.FieldMask field_mask = 36;
+}
+
+message AccountSetting {
+  message PddConfig {
+    string pid = 1;
+  }
+
+  PddConfig pdd = 1;
+}
+
+message UpdateAccountRequest {
+  uint32 id = 1;
+  string name = 2; // 帐号名称
+  string website = 3; // 公司网站
+  string corp_name = 4; // 公司名称
+  string license = 5; //  营业执照注册号/三证合一统一社会信用代码
+  string license_picture = 6; // 资质证件
+  string city = 7; // 注册城市
+  string legal_person = 8; // 法人
+  string legal_person_id = 9; // 法人身份证
+  string legal_person_phone = 10; // 法人联系电话
+  string industry = 11; // 行业
+}
+
+message GetAccountRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  bool view_token = 3;
+}
+
+message DeleteAccountRequest {
+  uint32 id = 1;
+}
+
+message GrantToRequest {
+  uint32 id = 1;
+  oneof grant_to {
+    uint32 user_id = 2;
+    uint32 enterprise_id = 3;
+  }
+}
+
+message GrantToResponse {
+  uint32 id = 1;
+  bool success = 2;
+}
+
+message RevokeFromRequest {
+  uint32 id = 1;
+  oneof grant_to {
+    uint32 user_id = 2;
+    uint32 enterprise_id = 3;
+  }
+}
+
+message RevokeFromResponse {
+  uint32 id = 1;
+  bool success = 2;
+}
+
+message ImportAuthRequest {
+  string provider = 1;
+  optional uint32 enterprise_id = 2;
+  string scene = 3; // 场景
+}
+
+message ImportAuthResponse {
+  string authorization_url = 1;
+  string state = 2;
+}
+
+message ImportAccountRequest {
+  string provider = 1;
+  string account_id = 2;
+  string access_token = 3;
+  int64 access_token_expires_in = 4;
+  optional string refresh_token = 5;
+  optional int64 refresh_token_expires_in = 6;
+  optional string state = 7;
+  optional uint32 enterprise_id = 8;
+}
+
+message ImportAccountResponse {
+  string provider = 1;
+  Account account = 2;
+}
+
+message ImportSchemasRequest {}
+
+message ImportSchema {
+  string provider = 1;
+  string title = 2;
+  string description = 3;
+  string cover_pic = 4;
+  string type = 5;
+  string authorization_url = 6;
+  string token_url = 7;
+  string scene = 8;
+  bool disabled = 9;
+  repeated string authorization_url_params = 10;
+  repeated string token_url_params = 11;
+  // repeated string fields = 3;
+}
+
+message ImportSchemasResponse {
+  repeated ImportSchema schemas = 1;
+}
+
+message ImportRequest {
+  string provider = 1;
+}
+
+message ImportResponse {
+  string authorization_url = 1;
+  string state = 2;
+}
+
+
+message BindingAccountRequest {
+  uint32 account_id = 1;
+  // oneof binder {
+  //   uint32 enterprise_id = 2;
+  //   uint32 user_id = 3;
+  // }
+}
+
+message BindingAccountResponse {}
+
+message UnbindingAccountRequest {
+  uint32 account_id = 1;
+  // oneof binder {
+  //   uint32 enterprise_id = 2;
+  //   uint32 user_id = 3;
+  // }
+}
+
+message UnbindingAccountResponse {
+  string account_id = 1;
+}
+
+message ListUserActionSetRequest {
+  uint32 account_id = 1;
+}
+
+message UserActionsSetResponse {
+  uint32 account_id = 1;
+  repeated UserActionSetID user_action_set_ids = 2;
+}
+
+message UserActionSetID {
+  bool activate_status = 1;
+  string created_time = 2;
+  string description = 3;
+  bool enable_conversion_claim = 4;
+  string name = 5;
+  string type = 6;
+  repeated string usages = 7;
+  uint64 user_action_set_id = 8;
+}

@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+package config;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info : {version : "1.0";
+}
+external_docs : {
+url:
+  "https://github.com/hnhuaxi/proto";
+description:
+  "MX ads platform gateway";
+}
+schemes :
+    [HTTP, HTTPS];
+}
+;
+
+service ConfigService {
+  rpc ListConfigKeys(ListConfigKeysRequest) returns (ListConfigKeysResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/users
+      get : "/api/v1/configkeys/{prefix}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary : "Get Config"
+      description : "Return config keys by prefix filter."
+      tags : "ConfigService"
+    };
+  }
+
+  rpc GetConfig(GetConfigRequest) returns (ConfigResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/users
+      get : "/api/v1/config/{configkey}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary : "Get Config"
+      description : "Return config schama and settings for configkey."
+      tags : "ConfigService"
+    };
+  }
+
+  // rpc SetConfig(SetConfigRequest) returns (SetConfigResponse) {
+  //   option (google.api.http) = {
+  //     // Route to this method from POST requests to /api/v1/users
+  //     post : "/api/v1/config/{configkey}"
+  //   };
+  //   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) =
+  //   {
+  //     summary : "Set Config"
+  //     description : "Set config settings for configkey."
+  //     tags : "Config"
+  //   };
+  // }
+
+  rpc UpdateConfig(UpdateConfigRequest) returns (UpdateConfigResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/users
+      put : "/api/v1/config/{configkey}"
+      body : "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary : "Update Config"
+      description : "Update config settings for configkey."
+      tags : "ConfigService"
+    };
+  }
+
+  rpc GetConfigValue(GetConfigValueRequest) returns (GetConfigValueResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/users
+      get : "/api/v1/config/{configkey}/key/{selector}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary : "Get Config Key for selector"
+      description : "Return config key for configkey."
+      tags : "ConfigService"
+    };
+  }
+
+  rpc SetConfigValue(SetConfigValueRequest) returns (SetConfigValueResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/users
+      put : "/api/v1/config/{configkey}/key/{selector}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary : "Set Config Key for selector"
+      description : "Set config key for configkey."
+      tags : "ConfigService"
+    };
+  }
+}
+
+message ListConfigKeysRequest { string prefix = 1; }
+
+message ListConfigKeysResponse { repeated string configkeys = 1; }
+
+message GetConfigRequest { string configkey = 1; }
+
+message ConfigResponse {
+  string config_key = 1;
+  string schema = 2;
+  string ui = 3;
+  string settings = 4;
+}
+
+message UpdateConfigRequest {
+  string configkey = 1;
+  string settings = 2;
+}
+
+message UpdateConfigResponse {
+  string config_key = 1;
+  string settings = 2;
+}
+
+message GetConfigValueRequest {
+  string configkey = 1;
+  string selector = 2;
+}
+
+message GetConfigValueResponse {
+  string config_key = 1;
+  string selector = 2;
+  google.protobuf.Any value = 3;
+}
+
+message SetConfigValueRequest {
+  string configkey = 1;
+  string selector = 2;
+  google.protobuf.Any value = 3;
+}
+
+message SetConfigValueResponse {
+  string config_key = 1;
+  string selector = 2;
+  google.protobuf.Any old_value = 3;
+}

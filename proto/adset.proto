@@ -1,0 +1,740 @@
+syntax = "proto3";
+
+package ads;
+
+import "account.proto";
+import "ads.proto";
+import "adstrategy.proto";
+import "common/common.proto";
+import "customer.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "product.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "thirdpartyapp.proto";
+import "track.proto";
+import "validate/validate.proto";
+
+// Defines the import path that should be used to import the generated package,
+// and the package name.
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hnhuaxi/proto";
+    description: "MX ads platform gateway";
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ];
+};
+
+service AdsetService {
+  // 查询广告集
+  rpc ListAdsets(ListAdsetsRequest) returns (ListAdsetsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      get: "/api/v1/adsets"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List adsets"
+      description: "List all adsets on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc ListEnterpriseAdsets(ListAdsetsRequest) returns (ListAdsetsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      get: "/api/v1/enterprise/{enterprise_id}/adsets"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Enterprise adsets"
+      description: "List all Enterprise adsets on the server."
+      tags: "AdsetService EnterpriseService"
+    };
+  }
+
+  rpc CreateAdset(CreateAdsetRequest) returns (AdsetResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      post: "/api/v1/adsets"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create a adsets"
+      description: "Create a adsets on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc CreateEnterpriseAdset(CreateAdsetRequest) returns (AdsetResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      post: "/api/v1/enterprise/{enterprise_id}/adsets"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create a adsets"
+      description: "Create a adsets on the server."
+      tags: "AdsetService EnterpriseService"
+    };
+  }
+
+  rpc GetAdset(GetAdsetRequest) returns (AdsetResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      get: "/api/v1/adsets/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Change a adset"
+      description: "Change a adset fields on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc GetEnterpriseAdset(GetAdsetRequest) returns (AdsetResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/enterprise/{enterprise_id}/adsets/{id}
+      get: "/api/v1/enterprise/{enterprise_id}/adsets/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Change a adset"
+      description: "Change a adset fields on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc UpdateAdset(UpdateAdsetRequest) returns (AdsetResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Change a adset"
+      description: "Change a adset fields on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc ChangeAdsetState(ChangeAdsetStateRequest) returns (AdsetResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{id}/state"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Change a adset state"
+      description: "Change a adset status on the server."
+      tags: "Ads Adset"
+    };
+  }
+
+  rpc CorrectAdset(CorrectAdsetRequest) returns (AdsetCorrectionResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{id}/correct"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Correction a adset stat"
+      description: "Correction a adset stat on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc DeleteAdset(DeleteAdsetRequest) returns (AdsetResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      delete: "/api/v1/adsets/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Delete a adsets"
+      description: "Create a adsets on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc Send(SendActionRequest) returns (SendActionResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{id}/action",
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "send a command to adset"
+      description: "send a command to adset on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc AdsetAppendAds(AdsetAppendAdsReqeust) returns (AdsetAppendAdsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{id}/ads"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "append many ads to adset"
+      description: "append user choose ads to adset on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc AdsetDeleteAds(AdsetDeleteAdsReqeust) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      delete: "/api/v1/adsets/{id}/ads"
+      // body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "remove many ads to adset"
+      description: "remove user choose ads to adset on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc AdsetTracks(AdsetTracksRequest) returns (AdsetTracksResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      get: "/api/v1/adsets/{id}/tracks"
+      // body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "get tracks of adset"
+      tags: "AdsetService TrackService"
+    };
+  }
+
+  rpc AdsetTimeline(AdsetTimelineRequest) returns (AdsetTimelineResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      post: "/api/v1/adsets/{id}/timeline"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "get timeline of adset"
+      tags: "AdsetService"
+    };
+  }
+
+  rpc AdsetTimeline2(AdsetTimelineRequest) returns (AdsetTimelineResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      post: "/api/v1/adsets/{id}/timeline2"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "get timeline of adset"
+      tags: "AdsetService"
+    };
+  }
+
+  rpc EnterpriseAdsetTracks(AdsetTracksRequest) returns (AdsetTracksResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      get: "/api/v1/enterprise/{enterprise_id}/adsets/{id}/tracks"
+      // body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "get tracks of enterprise adset"
+      tags: "AdsetService EnterpriseService"
+    };
+  }
+
+  rpc Push(PushRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{adset_id}/push"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "add a the pushback"
+      description: "send push event."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc PushbackAck(PushbackAckRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{adset_id}/ack"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Confirm the pushback is successful"
+      description: "send ack event to confirm the pushback is successful."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc PushbackReplenish(PushbackReplenishRequest) returns (ReplenishResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{adset_id}/relenish"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Send a replenish Pushback to the adset"
+      description: "Send a replenish Pushback to the adset on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc PushbackLock(PushbackLockRequest) returns (PushbackLockResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{adset_id}/lock"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Lock a pushback of adset"
+      description: "Lock a pushback of adset on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  // PushbackLocks 一次性锁定多个adset pushback
+  rpc PushbackLocks(PushbackLocksRequest) returns (PushbackLocksResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{adset_id}/locks"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Lock pushbacks of adsets"
+      description: "Lock pushbacks of adsets on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc PushbackRecall(PushbackRecallRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{adset_id}/recall"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Cancel a pushback of adset"
+      description: "Cancel a pushback of adset on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc LiveAdset(LiveAdsetRequest) returns (stream AdsetStat) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      get: "/api/v1/adsets/{adset_id}/live"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Live a adset stats"
+      description: "Live adset on the server."
+      tags: "AdsetService"
+    };
+  }
+
+  rpc MoveAdset(MoveAdsetRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      put: "/api/v1/adsets/{adset_id}/move"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Move a adset"
+      description: "Move adset on the server."
+      tags: "AdsetService"
+    };
+  }
+}
+
+enum Status {
+  AD_PREPARE = 0;
+  AD_RUNNING = 1;
+  AD_STOP = 2;
+}
+
+message ListAdsetsRequest {
+  common.Paginate page = 1;
+  uint32 enterprise_id = 2;
+  uint32 user_id = 3;
+  repeated string filters = 4;
+  repeated string columns = 5;
+  repeated string scopes = 6;
+}
+
+message ListAdsetsResponse {
+  repeated Adset adsets = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message CreateAdsetRequest {
+  string name = 1;
+  string provider = 2;
+  string strategy_name = 3; // 策略类型
+  adstrategy.AdStrategy strategy = 4;
+  uint32 account_id = 5;
+  repeated uint32 adids = 6;
+  repeated string done_actions = 7;
+  uint32 enterprise_id = 8;
+  int64 user_action_set_id = 9;
+  string goal = 10;
+  string deep_goal = 11;
+  AdsetParams params = 12;
+}
+
+message GetAdsetRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}
+
+message UpdateAdsetRequest {
+  uint32 id = 1;
+  optional string name = 2;
+  // string strategy = 2; // 策略类型
+  optional uint32 account_id = 3;
+  repeated uint32 adids = 4;
+  // uint32 enterprise_id  = 5;
+  optional int64 user_action_set_id = 5;
+  optional string goal = 6;
+  optional string deep_goal = 7;
+  optional bool freeze_customer = 8;
+  optional AdsetParams params = 9;
+  repeated string done_actions = 10;
+  optional bool expirment = 11;
+  optional bool review = 12;
+  optional PushStrategy push_strategy = 13;
+  optional string strategy_name = 14; // 策略类型
+  optional adstrategy.AdStrategy strategy = 15;
+  optional string version = 16;
+}
+
+message CorrectAdsetRequest {
+  uint32 id = 1;
+}
+
+message AdsetCorrectionResponse {
+  uint32 id = 1;
+  Correction correction = 2;
+}
+
+message ChangeAdsetStateRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  string status = 3;
+}
+
+message DeleteAdsetRequest {
+  uint32 id = 1;
+}
+
+message SendActionRequest {
+  uint32 id = 1;
+  string action = 2;
+  repeated string args = 3;
+}
+
+message SendActionResponse {
+  uint32 id = 1;
+  string action_id = 2;
+  string status = 3;
+}
+
+message AdsetResponse {
+  Adset adset = 1;
+}
+
+message AdsetAppendAdsReqeust {
+  uint32 id = 1;
+  uint32 account_id = 2;
+  repeated uint32 adids = 3;
+}
+
+message AdsetAppendAdsResponse {
+  repeated account.Ad ads = 1;
+}
+
+message AdsetTracksRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}
+
+message AdsetTracksResponse {
+  repeated track.Track tracks = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message AdsetTimelineRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  bool only_dones = 3;
+  common.Paginate page = 4;
+  uint32 start_time = 5;
+  uint32 end_time = 6;
+  string start_date = 7;
+  string end_date = 8;
+}
+
+message AdsetTimelineResponse {
+  repeated Timeline timeline = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message AdsetDeleteAdsReqeust {
+  uint32 id = 1;
+  uint32 account_id = 2;
+  repeated uint32 adids = 3;
+}
+
+message Correction {
+  google.protobuf.Timestamp correct_time = 1;
+  // string correct_date = 1;
+  int32 oft_push = 2;
+  int32 oft_done = 3;
+}
+
+message Adset {
+  uint32 id = 1;
+  string provider = 2;
+  string name = 3;
+  string prompt = 4;
+  repeated account.Ad ads = 5;
+  string preview = 6;
+  uint32 account_id = 7;
+  uint32 creator_id = 8;
+  common.User creator = 9;
+  account.Account account = 10;
+  string source_account_id = 11;
+  uint32 enterprise_id = 12;
+  string strategy_name = 13; // 策略类型
+  adstrategy.AdStrategy strategy = 14;
+  Correction correction = 15;
+  int64 user_action_set_id = 16;
+  string product_source_id = 17;
+  Status status = 18;
+  string goal = 19;
+  string deep_goal = 20;
+  bool freeze_customer = 21;
+  bool expirment = 22; // 实验
+  bool review = 23;
+  AdsetParams params = 24;
+  repeated string done_actions = 25;
+  common.Enterprise enterprise = 26;
+  optional product.Product product = 27;
+  repeated customer.CustomerService customer_services = 28;
+  repeated thirdpartyapp.ThirdPartyApp thirdparty_apps = 29;
+  PushStrategy push_strategy = 30;
+  google.protobuf.Timestamp created_time = 31;
+  google.protobuf.Timestamp updated_time = 32;
+  float count = 33;
+  float cost = 34;
+  float total_cost = 35;
+  float view = 36;
+  float click = 37;
+  string version = 38;
+}
+
+message Timeline {
+  google.protobuf.Timestamp time = 1;
+  uint32 duration = 2;
+  string subject = 3;
+  oneof action {
+    OperAction oper = 6;
+    TrackAction track = 7;
+  }
+}
+
+message OperAction {
+  uint32 pushCount = 1;
+  uint32 ack = 2;
+  OperActionType action_type = 3;
+  string target = 4;
+  map<string, string> params = 5;
+}
+
+enum OperActionType {
+  OP_Push = 0;
+  OP_Ack = 1;
+  OP_ChangeSetting = 2;
+}
+
+message TrackAction {
+  repeated Action actions = 1;
+  bool canPush = 2;
+  bool pushed = 3;
+  string weixin = 4;
+  repeated string ips = 5;
+  repeated string cities = 6;
+  optional google.protobuf.Timestamp pushed_at = 7;
+}
+
+message Action {
+  string action_type = 1;
+  uint32 time = 2;
+  float scroll = 3;
+  track.ActionParams params = 4;
+}
+
+enum PushMode {
+  PMAuto = 0;
+  PMPID = 1;
+  PMTable = 2;
+}
+
+message PushStrategy {
+  PushMode mode = 1;
+  PushConfig config = 2;
+}
+
+message PushConfig {
+  optional AutoConfig auto = 1;
+  optional PIDConfig pid = 2;
+  optional TableConfig table = 3;
+}
+
+message PIDConfig {
+  float ratio = 1;
+  uint32 start = 2;
+  uint32 max_push_count = 3;
+  float pgain = 4;
+  float igain = 5;
+  float dgain = 6;
+  google.protobuf.Duration worker_internal = 7;
+}
+
+message AutoConfig {
+  uint32 start = 1;
+  float ratio = 2;
+}
+
+message TableConfig {
+  uint32 start = 1;
+  float ratio = 2;
+  float m_ratio = 3;
+}
+
+message AdsetParams {
+  float scrollX1 = 1; // 滚动系数1
+  float scrollX2 = 2; // 滚动系数2
+  float scrollX3 = 3; // 滚动系数3
+  uint32 stayTimeX1 = 4; // 停留时间系数1
+  uint32 stayTimeX2 = 5; // 停留时间系数2
+  uint32 stayTimeX3 = 6; // 停留时间系数3
+  float retX1 = 7; // 回调系数1
+  float retX2 = 8; // 回调系数2
+  uint32 start = 9; // 启动阈值
+  bool use_scene = 10; // 启用场景
+  repeated string scenes = 11; // 场景
+  int32 button_delay = 12; // 按钮延迟
+}
+
+message Ack {
+  uint32 adset_id = 1;
+  uint32 count = 2;
+  string weixin = 3;
+  google.protobuf.Timestamp created_time = 4;
+  uint32 user_id = 5;
+  string username = 6;
+}
+
+message PushbackAckRequest {
+  uint32 adset_id = 1;
+  uint32 count = 2;
+  string weixin = 3;
+}
+
+message PushbackReplenishRequest {
+  uint32 adset_id = 1;
+  uint32 count = 2;
+  optional string click_id = 3;
+  bool mock = 4;
+}
+
+message ReplenishResponse {
+  uint32 adset_id = 1;
+  uint32 fails = 2;
+  string warning = 3;
+}
+
+message PushbackRecallRequest {
+  uint32 adset_id = 1;
+  uint32 count = 2;
+}
+
+message LiveAdsetRequest {
+  uint32 adset_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+}
+
+message AdsetStat {
+  uint32 adset_id = 1;
+  uint32 acks = 2;
+  int32 d_acks = 3;
+  uint32 push = 4;
+  int32 d_push = 5;
+  uint32 pv = 6;
+  int32 d_pv = 7;
+  uint32 ol = 8;
+  int32 d_ol = 9;
+  uint32 done = 10;
+  int32 d_done = 11;
+  uint32 adone = 12;
+  int32 d_adone = 13;
+  double total_cost = 14;
+  double d_total_cost = 15;
+  int32 view = 16;
+  int32 d_view = 17;
+  int32 clicks = 18;
+  int32 d_clicks = 19;
+  double cost = 20;
+  double d_cost = 21;
+  uint32 rdone = 22;
+  int32 d_rdone = 23;
+  double rrate = 24;
+  double d_rrate = 25;
+  uint32 remind = 26;
+  int32 d_remind = 27;
+  string error = 28;
+}
+
+message PushRequest {
+  uint32 adset_id = 1;
+  string click_id = 2;
+  bool deep = 3;
+  string group = 4; // 分组
+  string kf = 5; // 客服
+  track.ActionParams params = 6;
+}
+
+message PushbackLockRequest {
+  uint32 adset_id = 1;
+  string click_id = 2;
+  bool lock = 3;
+}
+
+message PushbackLockResponse {
+  uint32 adset_id = 1;
+  bool success = 2;
+}
+
+message PushbackLocksRequest {
+  uint32 adset_id = 1;
+  repeated string click_ids = 2;
+  bool lock = 3;
+}
+
+message PushbackLocksResponse {
+  uint32 adset_id = 1;
+  bool success = 2;
+}
+
+message MoveAdsetRequest {
+  uint32 adset_id = 1;
+  uint32 to_enterprise_id = 2;
+}

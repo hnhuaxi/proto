@@ -1,0 +1,392 @@
+syntax = "proto3";
+
+package thirdpartyapp;
+
+import "common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hnhuaxi/proto"
+    description: "MX ads platform gateway"
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ];
+};
+
+service ThirdPartyAppService {
+  rpc CreateThirdPartyApp(CreateThirdPartyAppRequest) returns (CreateThirdPartyAppResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/thirdpartyapps
+      post: "/api/v1/thirdpartyapps"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create third party app"
+      description: "Create a third party app on the server."
+      tags: "ThirdPartyAppService"
+    };
+  }
+
+  rpc ListThirdPartyApps(ListThirdPartyAppsRequest) returns (ListThirdPartyAppsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/thirdpartyapps
+      get: "/api/v1/thirdpartyapps"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List third party apps"
+      description: "List all third party apps on the server."
+      tags: "ThirdPartyAppService"
+    };
+  }
+
+  rpc ListEnterpriseThirdPartyApps(ListThirdPartyAppsRequest) returns (ListThirdPartyAppsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/enterprise/{enterprise_id}/thirdpartyapps
+      get: "/api/v1/enterprise/{enterprise_id}/thirdpartyapps"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List third party apps"
+      description: "List all third party apps on the server."
+      tags: "ThirdPartyAppService EnterpriseService"
+    };
+  }
+
+  rpc ListThirdPartyTemplates(ListThirdPartyTemplatesRequest) returns (ListThirdPartyTemplatesResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/thirdparty_templates
+      put: "/api/v1/thirdparty_templates"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List third party templates apps"
+      description: "List third party templates on the server."
+      tags: "ThirdPartyAppService"
+    };
+  }
+
+  rpc GetThirdPartyApp(GetThirdPartyAppRequest) returns (GetThirdPartyAppResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/thirdpartyapps/{id}
+      get: "/api/v1/thirdpartyapps/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get third party app"
+      description: "get a third party app on the server."
+      tags: "ThirdPartyAppService"
+    };
+  }
+
+  rpc DeleteThirdPartyApp(DeleteThirdPartyAppRequest) returns (DeleteThirdPartyAppResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/users
+      delete: "/api/v1/thirdpartyapps/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Delete third party app"
+      description: "Delete a third party app on the server."
+      tags: "ThirdPartyAppService"
+    };
+  }
+
+  rpc UploadThirdPartyApp(UploadThirdPartyAppRequest) returns (UploadThirdPartyAppResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/thirdpartyapps/{id}/upload
+      put: "/api/v1/thirdpartyapps/{id}/upload"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Upload thirdparty app"
+      description: "Upload a version miniprogram of thirdparty app on the server."
+      tags: "ThirdPartyAppService EnterpriseService"
+    };
+  }
+
+  rpc PreviewThirdPartyApp(PreviewThirdPartyAppRequest) returns (PreviewThirdPartyAppResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/thirdpartyapps/{id}/preview
+      put: "/api/v1/thirdpartyapps/{id}/preview"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Preview thirdparty app"
+      description: "Preview a version miniprogram of thirdparty app on the server."
+      tags: "ThirdPartyAppService EnterpriseService"
+    };
+  }
+
+  rpc SubmitThirdPartyApp(SubmitThirdPartyAppRequest) returns (SubmitThirdPartyAppResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/thirdpartyapps/{id}/submit
+      put: "/api/v1/thirdpartyapps/{id}/submit"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Upload thirdparty app"
+      description: "Upload a version miniprogram of thirdparty app on the server."
+      tags: "ThirdPartyAppService EnterpriseService"
+    };
+  }
+
+  rpc BatchSubmitThirdPartyApp(BatchSubmitThirdPartyAppRequest) returns (BatchSubmitThirdPartyAppResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/enterprise/{enterprise_id}/batch_submit
+      post: "/api/v1/enterprise/{enterprise_id}/batch_submit"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "batch submit to audit thirdparty app"
+      description: "batch submit a preview version to audit  thirdparty app on the server."
+      tags: "ThirdPartyAppService EnterpriseService"
+    };
+  }
+
+  rpc ReleaseThirdPartyApp(ReleaseThirdPartyAppRequest) returns (ReleaseThirdPartyAppResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/thirdpartyapps/{id}/release
+      put: "/api/v1/thirdpartyapps/{id}/release"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "release thirdparty app"
+      description: "release a version miniprogram of thirdparty app on the server."
+      tags: "ThirdPartyAppService EnterpriseService"
+    };
+  }
+
+  rpc BatchReleaseThirdPartyApp(BatchSubmitThirdPartyAppRequest) returns (BatchSubmitThirdPartyAppResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/enterprise/{enterprise_id}/batch_release
+      post: "/api/v1/enterprise/{enterprise_id}/batch_release"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "batch release multi thirdparty apps"
+      description: "batch release multi thirdparty apps on the server."
+      tags: "ThirdPartyAppService EnterpriseService"
+    };
+  }
+
+  rpc WithdrawThirdPartyApp(WithdrawThirdPartyAppRequest) returns (WithdrawThirdPartyAppResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/thirdpartyapps/{id}/release
+      put: "/api/v1/thirdpartyapps/{id}/withdraw"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "withdraw thirdparty app audit"
+      description: "withdraw a audit version miniprogram of thirdparty app on the server."
+      tags: "ThirdPartyAppService EnterpriseService"
+    };
+  }
+}
+
+enum AppType {
+  MiniProgram = 0;
+  App = 1;
+}
+
+message ThirdPartyApp {
+  uint32 id = 1;
+  string provider = 2;
+  AppType app_type = 3;
+  uint32 enterprise_id = 4;
+  common.Enterprise enterprise = 5;
+  uint32 creator_id = 6;
+  common.User creator = 7;
+  string manage_app_id = 8;
+  string app_id = 9;
+  string app_secret = 10;
+  string username = 11;
+  string token = 12;
+  string encoding_aes_key = 13;
+  string name = 14;
+  string component_access_token = 15;
+  google.protobuf.Timestamp component_access_token_expires_at = 16;
+  string authorizer_access_token = 17;
+  google.protobuf.Timestamp authorizer_access_token_expires_at = 18;
+  string authorizer_refresh_token = 19;
+  google.protobuf.Timestamp authorizer_refresh_token_expires_at = 20;
+  google.protobuf.Timestamp blocked_at = 21;
+  string blocked_reason = 22;
+  string blocked_content = 23;
+  string app_version = 24; // 线上版本
+  uint32 audit_id = 25; // 审核 ID
+  string audit_status = 26;
+  string audit_reason = 27;
+  // 独立应用
+  bool is_independent = 28;
+  repeated string tags = 29;
+  google.protobuf.Timestamp created_time = 30;
+  google.protobuf.Timestamp updated_time = 31;
+}
+
+message CreateThirdPartyAppRequest {
+  string provider = 1;
+  AppType app_type = 2;
+  uint32 enterprise_id = 3;
+  string manage_app_id = 4;
+  string app_id = 5;
+  string app_secret = 6;
+  string token = 7;
+  string encoding_aes_key = 8;
+  string name = 9;
+  string access_token = 10;
+  string app_version = 11; // 线上版本
+  uint32 audit_id = 12; // 审核 ID
+  string audit_status = 13;
+  string audit_reason = 14;
+  // 独立应用
+  repeated string tags = 15;
+}
+
+message CreateThirdPartyAppResponse {
+  ThirdPartyApp app = 1;
+}
+
+message ListThirdPartyAppsRequest {
+  common.Paginate page = 1;
+  repeated common.Filter filters2 = 2;
+  repeated common.Sort sorts = 3;
+  repeated string filters = 4;
+  repeated string columns = 5;
+  repeated string scopes = 6;
+  uint32 enterprise_id = 7;
+}
+
+message ListThirdPartyAppsResponse {
+  repeated ThirdPartyApp apps = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message DeleteThirdPartyAppRequest {
+  uint32 id = 1;
+}
+
+message DeleteThirdPartyAppResponse {
+  ThirdPartyApp app = 1;
+}
+
+message UploadThirdPartyAppRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  string template_id = 3;
+  string ext_json = 4;
+  string version = 5;
+  string description = 6;
+  bool preview = 7;
+  string path = 8;
+}
+
+message UploadThirdPartyAppResponse {
+  bool success = 1;
+  bytes qrcode = 2;
+}
+
+message AuditItem {
+  string address = 1;
+  string tag = 2;
+  string FirstClass = 3;
+  string SecondClass = 4;
+  string third_class = 5;
+  string title = 6;
+  string first_id = 7;
+  string second_id = 8;
+  string third_id = 9;
+}
+
+message SubmitThirdPartyAppRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  repeated AuditItem items = 3;
+  bool privacy_api_not_use = 4;
+}
+
+message SubmitThirdPartyAppResponse {
+  uint32 id = 1;
+  uint32 audit_id = 2;
+}
+
+message ReleaseThirdPartyAppRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}
+
+message ReleaseThirdPartyAppResponse {
+  bool success = 1;
+}
+
+message WithdrawThirdPartyAppRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}
+
+message WithdrawThirdPartyAppResponse {
+  bool success = 1;
+}
+
+message PreviewThirdPartyAppRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  string path = 3;
+}
+
+message PreviewThirdPartyAppResponse {
+  bytes qrcode = 1;
+}
+
+message BatchSubmitThirdPartyAppRequest {
+  repeated uint32 ids = 1;
+  uint32 enterprise_id = 2;
+  string template_id = 3;
+  string ext_json = 4;
+  string version = 5;
+  string description = 6;
+  bool upload = 7;
+  repeated AuditItem items = 8;
+  bool privacy_api_not_use = 9;
+}
+
+message BatchSubmitThirdPartyAppResponse {
+  repeated bool successes = 1;
+}
+
+message ListThirdPartyTemplatesRequest {
+  string provider = 1;
+}
+
+message ListThirdPartyTemplatesResponse {
+  message Template_list {
+    google.protobuf.Timestamp created_time = 1;
+    string user_version = 2;
+    string user_desc = 3;
+    string template_id = 4;
+    string draft_id = 5;
+    string source_miniprogram_appid = 6;
+    string source_miniprogram = 7;
+    string developer = 8;
+    uint32 template_type = 9;
+    // repeated google.protobuf.Any category_list = 10;
+  }
+
+  string provider = 1;
+  repeated Template_list template_list = 2;
+}
+
+message GetThirdPartyAppRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  bool get_info = 3;
+  bool view_token = 4;
+}
+
+message GetThirdPartyAppResponse {
+  ThirdPartyApp app = 1;
+}

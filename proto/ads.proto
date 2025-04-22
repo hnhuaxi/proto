@@ -1,0 +1,133 @@
+syntax = "proto3";
+
+package ads;
+
+import "account.proto";
+import "common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "user.proto";
+import "validate/validate.proto";
+
+// Defines the import path that should be used to import the generated package,
+// and the package name.
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hnhuaxi/proto";
+    description: "MX ads platform gateway";
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ];
+};
+
+service AdsService {
+  // 查询主体账户
+  rpc ListAds(ListAdsRequest) returns (ListAdsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/ads
+      get: "/api/v1/ads"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List ads"
+      description: "List all ads on the server."
+      tags: "AdsService"
+    };
+  }
+
+  rpc ListEnterpriseAds(ListAdsRequest) returns (ListAdsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/enterprise/{enterprise_id}/ads
+      get: "/api/v1/enterprise/{enterprise_id}/ads"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Enterprise ads"
+      description: "List Enterprise all ads on the server."
+      tags: "AdsService EnterpriseService"
+    };
+  }
+
+  rpc ListAdgroups(ListAdgroupsRequest) returns (ListAdgroupsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/adgroups
+      get: "/api/v1/adgroups"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Adgroups"
+      description: "List Adgroups all ads on the server."
+      tags: "AdsService"
+    };
+  }
+
+  rpc ListEnterpriseAdgroups(ListAdgroupsRequest) returns (ListAdgroupsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/accounts
+      get: "/api/v1/enterprise/{enterprise_id}/adgroups"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Enterprise Adgroups"
+      description: "List Enterprise all Adgroups on the server."
+      tags: "AdsService EnterpriseService"
+    };
+  }
+
+  rpc ListUserAds(ListAdsRequest) returns (ListAdsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/users/{user_id}/ads
+      get: "/api/v1/users/{user_id}/ads"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List User ads"
+      description: "List User all ads on the server."
+      tags: "AdsService EnterpriseService"
+    };
+  }
+
+  rpc ListUserAdgroups(ListAdgroupsRequest) returns (ListAdgroupsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/users/{user_id}/adgroups
+      get: "/api/v1/users/{user_id}/adgroups"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List User adgroups"
+      description: "List User all adgroups on the server."
+      tags: "AdsService UserSerivce"
+    };
+  }
+}
+
+message ListAdsRequest {
+  common.Paginate page = 1;
+  uint32 enterprise_id = 2;
+  uint32 user_id = 3;
+  repeated string filters = 4;
+  repeated string columns = 5;
+  repeated string scopes = 6;
+}
+
+message ListAdsResponse {
+  repeated account.Ad ads = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message ListAdgroupsRequest {
+  common.Paginate page = 1;
+  uint32 enterprise_id = 2;
+  uint32 user_id = 3;
+  repeated string filters = 4;
+  repeated string columns = 5;
+  repeated string scopes = 6;
+}
+
+message ListAdgroupsResponse {
+  repeated account.Adgroup adgroups = 1;
+  common.PaginatedResponse page = 2;
+}

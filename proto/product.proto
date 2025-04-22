@@ -1,0 +1,249 @@
+syntax = "proto3";
+
+package product;
+
+import "common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hnhuaxi/proto"
+    description: "MX ads platform gateway"
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ];
+};
+
+service ProductService {
+  rpc ListProducts(ListProductsRequest) returns (ListProductsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/products
+      get: "/api/v1/products"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Products"
+      description: "List All Products from the server"
+      tags: "ProductService"
+    };
+  }
+
+  rpc ListEnterpriseProducts(ListProductsRequest) returns (ListProductsResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to "/api/v1/enterprise/{enterprise_id}/products"
+      get: "/api/v1/enterprise/{enterprise_id}/products"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Enterprise Products"
+      description: "List All Products of Enterprise from the server"
+      tags: "EnterpriseService ProductService"
+    };
+  }
+
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/products
+      post: "/api/v1/products"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create Product"
+      description: "Create a Product from the server"
+      tags: "ProductService"
+    };
+  }
+
+  rpc ImportProduct(ImportProductRequest) returns (ImportProductResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/products/import
+      post: "/api/v1/products/import"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Import Product"
+      description: "Import a Product from the server"
+      tags: "ProductService"
+    };
+  }
+
+  rpc ImportEnterpriseProduct(ImportProductRequest) returns (ImportProductResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/products/import
+      post: "/api/v1/enterrprise/{enterprise_id}/products/import"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Import Enterprise Product"
+      description: "Import a Product to Enterprise from the server"
+      tags: "ProductService EnterpriseService"
+    };
+  }
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/products/{id}
+      get: "/api/v1/products/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get Product"
+      description: "Get a Product from the server"
+      tags: "ProductService"
+    };
+  }
+
+  rpc SyncProduct(SyncProductRequest) returns (SyncProductResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/products/{id}
+      put: "/api/v1/products/{id}/sync"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Sync Product"
+      description: "Sync a Product from the server"
+      tags: "ProductService"
+    };
+  }
+
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse) {
+    option (google.api.http) = {
+      // Route to this method from PUT requests to /api/v1/products/{id}
+      put: "/api/v1/products/{id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Update Product"
+      description: "Update a Product from the server"
+      tags: "ProductService"
+    };
+  }
+
+  rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse) {
+    option (google.api.http) = {
+      // Route to this method from DELETE requests to /api/v1/products/{id}
+      delete: "/api/v1/products/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Delete Product"
+      description: "Delete a Product from the server"
+      tags: "ProductService"
+    };
+  }
+}
+
+message ListProductsRequest {
+  uint32 enterprise_id = 1;
+  common.Paginate page = 2;
+  repeated string filters = 3;
+  repeated string columns = 4;
+  repeated string scopes = 5;
+}
+
+message ListProductsResponse {
+  repeated Product products = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message CreateProductRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  string name = 3;
+  string provider = 4;
+  float price = 5;
+}
+
+message CreateProductResponse {
+  Product product = 1;
+}
+
+message ImportProductRequest {
+  uint32 enterprise_id = 1;
+  uint32 account_id = 2;
+  string provider = 3;
+  string product_id = 4;
+}
+
+message ImportProductResponse {
+  string auth_url = 1;
+  string mobile_auth_url = 2;
+  optional Product product = 3;
+  bool created = 4;
+}
+
+message GetProductRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}
+
+message GetProductResponse {
+  Product product = 1;
+}
+
+message SyncProductRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+}
+
+message SyncProductResponse {
+  Product product = 1;
+}
+
+message UpdateProductRequest {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  string name = 3;
+  float price = 4;
+}
+
+message UpdateProductResponse {
+  Product Product = 1;
+}
+
+message DeleteProductRequest {
+  uint32 id = 1;
+}
+
+message DeleteProductResponse {
+  Product product = 1;
+}
+
+enum ProductStatus {
+  Initial = 0;
+  LaunchAuth = 1;
+  Synced = 2;
+}
+
+message Product {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  uint32 account_id = 3;
+  uint32 adset_id = 4;
+  string name = 5; // 产品名称
+  string provider = 6; // 来源
+  string source_id = 7; // 源ID
+  string image = 8; // 商品主图片
+  string url = 9; // 商品URL地址
+  repeated string gallery_urls = 10; // 商品相册列表
+  string thumbnail_url = 11; // 商品缩略图
+  string product_sign = 12; // 商品签名ID
+  string description = 13; // 描述
+  string brand = 14; // 品牌
+  string category = 15; // 分类
+  repeated string activity_tags = 16; // 活动标签
+  repeated string tags = 17; // 标签
+  string shop_name = 18; // 店铺名
+  string shop_source_id = 19; // 店铺源ID
+  string shop_image_url = 20; // 店铺图片
+  float price = 21;
+  float group_price = 22;
+  float group_discount = 23;
+  bytes custom_parameters = 24;
+  string pid = 25;
+  ProductStatus status = 26;
+  repeated string video_urls = 27;
+  google.protobuf.Timestamp created_time = 28;
+  google.protobuf.Timestamp updated_time = 29;
+}

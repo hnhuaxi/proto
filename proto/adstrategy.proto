@@ -1,0 +1,149 @@
+syntax = "proto3";
+
+package adstrategy;
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+// Defines the import path that should be used to import the generated package,
+// and the package name.
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+
+enum ConversionType {
+  CTLandingPage = 0;
+  CTMiniprogram = 1;
+  CTApp = 2;
+  CTJumpMiniprogram = 3;
+  CTMiniprogramGroup = 4;
+  CTSchemaForm = 5;
+  CTPingduoduoProduct = 6;
+  CTJDUnion = 7;
+  CTZop = 8; // 联通王卡
+  CTSinon = 9; // 电信炫铃
+  CTHuoke = 10; // 获客
+}
+
+message URL {
+  string url = 1;
+  string name = 2;
+  bool disable = 3;
+  string group = 4;
+}
+
+message MiniprogramItem {
+  string app_id = 1;
+  string name = 2;
+  optional google.protobuf.Timestamp blocked_time = 3;
+  string blocked_reason = 4;
+}
+
+message AdStrategy {
+  message Landing {
+    repeated URL urls = 1;
+  }
+
+  message App {
+    message Android {
+      string bundle_id = 1;
+    }
+
+    message Ios {
+      string bundle_id = 1;
+    }
+
+    Android android = 1;
+    Ios ios = 2;
+  }
+
+  message Miniprogram {
+    message Weixin {
+      string app_id = 1;
+      string app_secret = 2;
+      string path = 3;
+    }
+
+    Weixin weixin = 1;
+  }
+
+  message JumpMiniprogram {
+    message Weixin {
+      string app_id = 1;
+      string app_secret = 2;
+      string path = 3;
+      string access_token = 4;
+      google.protobuf.Timestamp access_token_expires = 5;
+    }
+
+    repeated URL landing_urls = 1;
+    Weixin weixin = 2;
+  }
+
+  message MiniprogramGroup {
+    repeated URL landing_urls = 1;
+    repeated MiniprogramItem miniprograms = 2;
+    string path = 3;
+    bool not_thrid = 4;
+  }
+
+  message SchemaForm {
+    repeated URL landing_urls = 1;
+    uint32 schema_id = 2;
+    string json_schema = 3;
+  }
+
+  message PingduoduoProduct {
+    uint32 product_id = 1;
+    repeated URL landing_urls = 2;
+    string goods_sign = 3;
+    string pid = 4;
+    uint32 account_id = 5;
+    map<string, string> params = 6;
+    // string access_token = 4;
+  }
+
+  message JDUnion {
+    string skuid = 1;
+    string url = 2;
+    repeated URL landing_urls = 3;
+    repeated MiniprogramItem miniprograms = 4;
+    string path = 5;
+    string pid = 6;
+    string promotoImageUrl = 7;
+    map<string, string> params = 8;
+  }
+
+  message Zop {
+    repeated URL landing_urls = 1;
+    string service_name = 2;
+  }
+
+  message Sinon {
+    repeated URL landing_urls = 1;
+    string return_url = 2;
+    string service_name = 3;
+  }
+
+  message Huoke {
+    repeated URL landing_urls = 1;
+    repeated URL huoke_urls = 2;
+    string service_name = 3;
+  }
+
+  string name = 1;
+  ConversionType conversion_type = 2;
+  optional Landing landing = 3;
+  optional App app = 4;
+  optional Miniprogram miniprogram = 5;
+  optional JumpMiniprogram jumpminiprogram = 6;
+  optional MiniprogramGroup miniprogramgroup = 7;
+  optional SchemaForm schema_form = 8;
+  optional PingduoduoProduct pingduoduo = 9;
+  optional JDUnion jdunion = 10;
+  optional Zop zop = 11;
+  optional Sinon sinon = 12;
+  optional Huoke huoke = 13;
+}

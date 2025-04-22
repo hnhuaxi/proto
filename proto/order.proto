@@ -1,0 +1,191 @@
+syntax = "proto3";
+
+package order;
+
+import "common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "product.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "track.proto";
+
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hnhuaxi/proto"
+    description: "MX ads platform gateway"
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ];
+};
+
+service OrderService {
+  rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/orders
+      get: "/api/v1/orders"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Orders"
+      description: "List All Orders from the server"
+      tags: "OrderService"
+    };
+  }
+
+  rpc ListEnterpriseOrders(ListOrdersRequest) returns (ListOrdersResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to "/api/v1/enterprise/{enterprise_id}/products"
+      get: "/api/v1/enterprise/{enterprise_id}/orders"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List Enterprise Orders"
+      description: "List All Orders of Enterprise from the server"
+      tags: "OrderService EnterpriseService"
+    };
+  }
+
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/orders
+      post: "/api/v1/orders"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create Order"
+      description: "Create a Order from the server"
+      tags: "OrderService"
+    };
+  }
+
+  rpc GetOrder(GetOrderRequest) returns (GetOrderResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/orders/{id}
+      get: "/api/v1/orders/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get Order"
+      description: "Get a Order from the server"
+      tags: "OrderService"
+    };
+  }
+
+  rpc UpdateOrder(UpdateOrderRequest) returns (UpdateOrderResponse) {
+    option (google.api.http) = {
+      // Route to this method from PUT requests to /api/v1/orders/{id}
+      put: "/api/v1/orders/{id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Update Order"
+      description: "Update a Order from the server"
+      tags: "OrderService"
+    };
+  }
+
+  rpc DeleteProduct(DeleteOrderRequest) returns (DeleteOrderResponse) {
+    option (google.api.http) = {
+      // Route to this method from DELETE requests to /api/v1/orders/{id}
+      delete: "/api/v1/orders/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Delete Order"
+      description: "Delete a Order from the server"
+      tags: "OrderService"
+    };
+  }
+}
+
+message ListOrdersRequest {
+  uint32 enterprise_id = 1;
+  common.Paginate page = 2;
+  repeated string filters = 3;
+  repeated string columns = 4;
+  repeated string scopes = 5;
+  optional string provider = 6;
+}
+
+message ListOrdersResponse {
+  repeated Order orders = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message CreateOrderRequest {
+  uint32 enterprise_id = 1;
+  string privider = 2;
+  string source_id = 3;
+  string username = 4;
+  string telephone = 5;
+  string click_id = 6;
+  string name = 7;
+  string skuid = 8;
+  uint32 adset_id = 9;
+  float quantity = 10;
+  float price = 11;
+  float total = 12;
+}
+
+message CreateOrderResponse {
+  Order order = 1;
+}
+
+message GetOrderRequest {
+  uint32 id = 1;
+}
+
+message GetOrderResponse {
+  Order order = 1;
+}
+
+message UpdateOrderRequest {
+  uint32 id = 1;
+  string username = 2;
+  string telephone = 3;
+  string click_id = 4;
+}
+
+message UpdateOrderResponse {
+  Order Order = 1;
+}
+
+message DeleteOrderRequest {
+  uint32 id = 1;
+}
+
+message DeleteOrderResponse {
+  Order order = 1;
+}
+message Order {
+  uint32 id = 1;
+  uint32 enterprise_id = 2;
+  uint32 adset_id = 3;
+  string provider = 4;
+  string source_id = 5;
+  string name = 6;
+  string username = 7;
+  string telephone = 8;
+  string click_id = 9;
+  string skuid = 10;
+  repeated OrderItem items = 11;
+  float total = 12;
+  float price = 13;
+  int32 quantity = 14;
+  bool push = 15;
+  google.protobuf.Timestamp created_time = 16;
+  google.protobuf.Timestamp updated_time = 17;
+  map<string, string> attributes = 18;
+}
+
+message OrderItem {
+  uint32 item_id = 1;
+  uint32 order_id = 2;
+  uint32 product_id = 3;
+  product.Product product = 4;
+  float price = 5;
+  uint32 amount = 6;
+  google.protobuf.Timestamp created_time = 7;
+  google.protobuf.Timestamp updated_time = 8;
+}

@@ -1,0 +1,229 @@
+syntax = "proto3";
+
+package user;
+
+import "common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+// Defines the import path that should be used to import the generated package,
+// and the package name.
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {version: "1.0"}
+  external_docs: {
+    url: "https://github.com/hnhuaxi/proto";
+    description: "MX ads platform gateway";
+  }
+  schemes: [
+    HTTP,
+    HTTPS
+  ];
+};
+
+service UserService {
+  rpc GetMe(GetMeRequest) returns (MeResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/users
+      get: "/api/v1/me"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get me"
+      description: "Return current user information for me."
+      tags: "UserService"
+    };
+  }
+
+  rpc AddUser(AddUserRequest) returns (common.User) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/users
+      post: "/api/v1/users"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Add a user"
+      description: "Add a user to the server."
+      tags: "UserService"
+    };
+  }
+
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+    option (google.api.http) = {
+      // Route to this method from GET requests to /api/v1/users
+      get: "/api/v1/users"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "List users"
+      description: "List all users on the server."
+      tags: "UserService"
+    };
+  }
+
+  rpc UpdateUser(UpdateUserRequest) returns (common.User) {
+    option (google.api.http) = {
+      // Route to this method from PUT requests to /api/v1/users
+      put: "/api/v1/users/{id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Update a user"
+      description: "Update a user on the server."
+      tags: "UserService"
+    };
+  }
+
+  rpc DeleteUser(DeleteUserRequest) returns (common.User) {
+    option (google.api.http) = {
+      // Route to this method from DELETE requests to /api/v1/users
+      delete: "/api/v1/users/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Delete a user"
+      description: "Delete a user on the server."
+      tags: "UserService"
+    };
+  }
+
+  rpc ChangePassword(ChangePasswordRequest) returns (common.User) {
+    option (google.api.http) = {
+      // Route to this method from PUT requests to /api/v1/users/:id/password
+      put: "/api/v1/users/{id}/password"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Change password"
+      description: "Change password for a user on the server."
+      tags: "UserService"
+    };
+  }
+
+  rpc ResetPassword(ResetPasswordRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/users/:id/password
+      put: "/api/v1/users/reset"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Reset password"
+      description: "Reset password for a user on the server."
+      tags: "UserService"
+    };
+  }
+
+  rpc LoginUser(LoginUserRequest) returns (LoginUserResponse) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/users/:id/password
+      put: "/api/v1/login"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Login in system"
+      description: "user password login in system."
+      tags: "UserService"
+    };
+  }
+
+  rpc LoginWithMobile(LoginWithMobileRequest) returns (common.User) {
+    option (google.api.http) = {
+      // Route to this method from POST requests to /api/v1/users/:id/password
+      put: "/api/v1/login_mobile"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Login with sms in system"
+      description: "received sms code login in system."
+      tags: "UserService"
+    };
+  }
+}
+
+message GetMeRequest {}
+
+enum UserRole {
+  Role_USER = 0;
+  Role_MEMBER = 1;
+  Role_ENTERPRISE_ADMIN = 2;
+  Role_OP = 3;
+  Role_ADMIN = 4;
+}
+
+message AddUserRequest {
+  string username = 1;
+  string password = 2;
+  string email = 3;
+  string mobile_phone = 4;
+  optional UserRole role = 5;
+  optional string gender = 6;
+  optional string avatar = 7;
+}
+
+message ListUsersRequest {
+  common.Paginate page = 1;
+  repeated common.Filter filters2 = 2;
+  repeated common.Sort sorts = 3;
+  repeated string filters = 4;
+  repeated string columns = 5;
+  repeated string scopes = 6;
+}
+
+message ListUsersResponse {
+  repeated common.User users = 1;
+  common.PaginatedResponse page = 2;
+}
+
+message UpdateUserRequest {
+  // Output readonly
+  uint32 id = 1;
+  optional string avatar = 2;
+  optional string email = 3;
+  optional string realname = 4;
+  optional uint32 gender = 5;
+  optional string location = 6;
+  optional string mobile = 7;
+  optional string summary = 8;
+}
+
+message DeleteUserRequest {
+  uint32 id = 1;
+}
+
+message ChangePasswordRequest {
+  uint32 id = 1;
+  string new_password = 2;
+  optional string old_password = 3;
+}
+
+message ResetPasswordRequest {
+  oneof identity {
+    string email = 1;
+    string username = 2;
+    string mobile = 3;
+  }
+}
+
+message LoginUserRequest {
+  string username = 1;
+  string password = 2;
+  optional string mobile_phone = 3;
+}
+
+message LoginUserResponse {
+  common.User user = 1;
+  string token = 2;
+}
+
+message LoginWithMobileRequest {
+  string mobile_phone = 1;
+  string sms_code = 2;
+}
+
+message MeResponse {
+  common.User user = 1;
+}
