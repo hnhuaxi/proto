@@ -3143,6 +3143,8 @@ func (m *Adset) validate(all bool) error {
 
 	// no validation rules for Version
 
+	// no validation rules for ProductPrice
+
 	if m.Product != nil {
 
 		if all {
@@ -5600,6 +5602,8 @@ func (m *PushRequest) validate(all bool) error {
 			}
 		}
 	}
+
+	// no validation rules for ProductPrice
 
 	if len(errors) > 0 {
 		return PushRequestMultiError(errors)

@@ -21,12 +21,12 @@ import "validate/validate.proto";
 
 // Defines the import path that should be used to import the generated package,
 // and the package name.
-option go_package = "github.com/hnhuaxi/proto/proto;proto";
+option go_package = "github.com/hnhuaxi/platform/proto;proto";
 // These annotations are used when generating the OpenAPI file.
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {version: "1.0"}
   external_docs: {
-    url: "https://github.com/hnhuaxi/proto";
+    url: "https://github.com/hnhuaxi/platform";
     description: "MX ads platform gateway";
   }
   schemes: [
@@ -538,6 +538,8 @@ message Adset {
   float view = 36;
   float click = 37;
   string version = 38;
+  float product_price = 39;
+  repeated string tags = 40;
 }
 
 message Timeline {
@@ -710,6 +712,8 @@ message PushRequest {
   string group = 4; // 分组
   string kf = 5; // 客服
   track.ActionParams params = 6;
+  float product_price = 7;
+  repeated string tags = 8;
 }
 
 message PushbackLockRequest {

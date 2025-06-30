@@ -6,7 +6,7 @@ import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/any.proto";
 
-option go_package = "github.com/hnhuaxi/proto/proto;proto";
+option go_package = "github.com/hnhuaxi/platform/proto;proto";
 
 // These annotations are used when generating the OpenAPI file.
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
@@ -14,7 +14,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 }
 external_docs : {
 url:
-  "https://github.com/hnhuaxi/proto";
+  "https://github.com/hnhuaxi/platform";
 description:
   "MX ads platform gateway";
 }
