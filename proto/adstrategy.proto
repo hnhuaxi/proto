@@ -11,7 +11,7 @@ import "validate/validate.proto";
 
 // Defines the import path that should be used to import the generated package,
 // and the package name.
-option go_package = "github.com/hnhuaxi/platform/proto;proto";
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
 
 enum ConversionType {
   CTLandingPage = 0;

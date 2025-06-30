@@ -12,7 +12,7 @@ import "google/protobuf/timestamp.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "validate/validate.proto";
 
-option go_package = "github.com/hnhuaxi/platform/proto;proto";
+option go_package = "github.com/hnhuaxi/proto/proto;proto";
 
 enum ImportScope {
   IMPORT_ADS = 0;
