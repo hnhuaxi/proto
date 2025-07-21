@@ -716,15 +716,7 @@ message PushRequest {
   track.ActionParams params = 6;
   float product_price = 7;
   repeated string tags = 8;
-  UserInfo user_info = 9;
-}
-
-message UserInfo {
-  string external_userid = 1;
-  string username = 2;
-  int32 type = 3;
-  string avatar = 4;
-  int32 gender = 5;
+  common.UserInfo user_info = 9;
 }
 
 message PushbackLockRequest {

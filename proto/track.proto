@@ -83,6 +83,7 @@ message Track {
   string account_id = 7;
   string ip = 8;
   ActionParams params = 9;
+  common.UserInfo user_info = 10;
 }
 
 message TrackState {
@@ -207,6 +208,7 @@ message Pushed {
   bool lock = 17;
   bool deep = 18;
   GyroscopeParams m = 19;
+  common.UserInfo user_info = 20;
 }
 
 message RecordRequest {

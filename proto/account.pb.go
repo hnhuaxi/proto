@@ -7,9 +7,6 @@
 package proto
 
 import (
-	reflect "reflect"
-	sync "sync"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
 	common "github.com/hnhuaxi/proto/common"
@@ -20,6 +17,8 @@ import (
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	fieldmaskpb "google.golang.org/protobuf/types/known/fieldmaskpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
+	reflect "reflect"
+	sync "sync"
 )
 
 const (

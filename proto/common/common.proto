@@ -94,3 +94,11 @@ message Enterprise {
   google.protobuf.Timestamp createdAt = 15;
   google.protobuf.Timestamp updatedAt = 16;
 }
+
+message UserInfo {
+  string external_userid = 1;
+  string username = 2;
+  int32 type = 3;
+  string avatar = 4;
+  int32 gender = 5;
+}
