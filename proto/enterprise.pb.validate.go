@@ -18,7 +18,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/anypb"
 
-	common "github.com/hnhuaxi/proto/common"
+	common "github.com/hnhuaxi/proto/proto/common"
 )
 
 // ensure the imports are used
