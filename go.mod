@@ -1,4 +1,4 @@
-module github.com/hnhuaxi/proto/proto
+module github.com/hnhuaxi/proto
 
 go 1.23.3
 
